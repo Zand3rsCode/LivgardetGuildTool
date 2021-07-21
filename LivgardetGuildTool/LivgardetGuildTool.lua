@@ -215,3 +215,5 @@ ZO_PreHook(MAIL_INBOX, "Delete", function(self)
 		end
 	end
 end)
+
+--hejsan
