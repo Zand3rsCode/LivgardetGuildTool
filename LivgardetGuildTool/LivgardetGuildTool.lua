@@ -10,6 +10,7 @@ LivgardetGuildTool = {
     chatIcon = nil
 }
 
+local SV
 local IconDiscord = "|t25:25:esoui/art/help/help_tabicon_cs_up.dds|t"
 local IconWeb= "|t25:25:esoui/art/tutorial/help_tabicon_tutorial_up.dds|t"
 local IconOpt= "|t25:25:esoui/art/chatwindow/chat_options_up.dds|t"
@@ -64,7 +65,14 @@ function LivgardetGuildTool:InitializeMenu()
                 self.db.skipMailDeletionPrompt = skip
             end,
         },
- 
+        {
+			type = "checkbox",
+			name = GetString(NOTYOU_CRAFT),
+			tooltip = GetString(NOTYOU_CRAFT_TOOLTIP),
+			getFunc = function() return SV.improveDialog end,
+			setFunc = function(value) SV.improveDialog = value end,
+			default = defaults.improveDialog,
+		},
 
     }
 
@@ -216,4 +224,24 @@ ZO_PreHook(MAIL_INBOX, "Delete", function(self)
 	end
 end)
 
---hejsan mamma bajs
+
+local function HookImproveDialog()
+	local function ShowDialog_Hook(name, data)
+		if name == "CONFIRM_IMPROVE_ITEM" or name == "CONFIRM_IMPROVE_LOCKED_ITEM" or name == "GAMEPAD_CONFIRM_IMPROVE_LOCKED_ITEM" then
+			if SV.improveDialog then
+				ImproveSmithingItem(data.bagId, data.slotIndex, data.boostersToApply)
+				return true
+			end
+		end
+	end
+	ZO_PreHook("ZO_Dialogs_ShowDialog", ShowDialog_Hook)
+end
+
+local function OnAddonLoaded(event, name)
+	if name == ADDON_NAME then
+		EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event) 
+        SV = ZO_SavedVars:NewAccountWide("NO_THANK_YOU_VARS", 1, defaults)
+		
+        HookImproveDialog()
+    end
+end
