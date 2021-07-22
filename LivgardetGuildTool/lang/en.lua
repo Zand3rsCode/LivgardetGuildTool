@@ -13,8 +13,10 @@ ZO_CreateStringId("LIVGARDET_BUTTON_SETTINGS", "Settings")
 -- Settings
 ZO_CreateStringId("LIVGARDET_SETTINGS", "Settings")
 ZO_CreateStringId("LIVGARDET_SETTINGS_HEADER_GENERAL", "General")
-ZO_CreateStringId("LIVGARDET_SETTINGS_HEADER_MAIL", "Mail Options")
+
+-- Show the chat icon
 ZO_CreateStringId("LIVGARDET_SETTINGS_CHAT_ICON", "Show chat icon")
+ZO_CreateStringId("LIVGARDET_SETTINGS_CHAT_ICON_TT", "Shows or removes the icon from the chat window")
 
 -- Chat Outputs
 ZO_CreateStringId("LIVGARDET_CHAT_GUILDHOUSE", "The journey to the Guild House starts :)")
@@ -25,8 +27,12 @@ ZO_CreateStringId("LIVGARDET_CHAT_SECRETHOUSE", "Coming Soon!!!")
 ZO_CreateStringId("GINV_GUILDINVITE", "Invite into \"<<1>>\" guild")
 ZO_CreateStringId("GINV_GUILDINVITED", "Invited <<C:1>> into \"<<2>>\" guild.")
 
--- Mail deletion --
-ZO_CreateStringId("LIVGARDET_SETTINGS_MAIL_DELETION", "Disable mail erase confirmation")
+-- Quality of life improvements --
+ZO_CreateStringId("LIVGARDET_SETTINGS_MAIL_DELETION", "Disable erase mail confirmation")
+ZO_CreateStringId("LIVGARDET_SETTINGS_MAIL_DELETION_TT", "This function removes the confirmation but only on mail without attachments")
 
--- Confirmation boxes --
-ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_REFINE", "Disable confirmation")
+ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE", "Disable Improvement confirmation")
+ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT", "This function removes the confirmation when upgrading gear so be careful.")
+
+ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_NOBOOK", "Quick Lorebook reading")
+ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_NOBOOK_TT", "Hides the LoreBook from view when clicking them in world")

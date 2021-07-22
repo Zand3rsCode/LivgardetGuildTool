@@ -5,6 +5,9 @@ LivgardetGuildTool = {
     displayName = "|cea4e49Livgardet|r |c40c0f0Guild Tool|r",
     defaults = {
         showChatIcon = true,
+        improveDialog = false,
+        dontReadBooks = false,
+  --      luaError = 1,
     },
     panel = nil,
     chatIcon = nil
@@ -17,6 +20,31 @@ local IconOpt= "|t25:25:esoui/art/chatwindow/chat_options_up.dds|t"
 local IconGrpTool = "|t25:25:esoui/art/mainmenu/menubar_group_up.dds|t"
 local IconGHouse = "|t25:25:esoui/art/mainmenu/menubar_guilds_up.dds|t"
 
+-- Removes the book from view when reading --
+
+local function DontReadBooks()
+
+	local function OnShowBook(eventCode, title, body, medium, showTitle)
+		local willShow = LORE_READER:Show(title, body, medium, showTitle)
+		if willShow then
+			PlaySound(LORE_READER.OpenSound)
+		else
+			EndInteraction(INTERACTION_BOOK)
+		end
+	end
+	local function OnDontShowBook()
+		EndInteraction(INTERACTION_BOOK)
+	end
+	if SV.dontReadBooks then
+		LORE_READER.control:UnregisterForEvent(EVENT_SHOW_BOOK)
+		LORE_READER.control:RegisterForEvent(EVENT_SHOW_BOOK, OnDontShowBook)
+	else
+		LORE_READER.control:UnregisterForEvent(EVENT_SHOW_BOOK)
+		LORE_READER.control:RegisterForEvent(EVENT_SHOW_BOOK, OnShowBook)
+	end
+end
+
+
 function LivgardetGuildTool:InitializeMenu()
     local LAM2 = LibAddonMenu2
 
@@ -25,7 +53,7 @@ function LivgardetGuildTool:InitializeMenu()
         name = self.addonName,
         displayName = self.displayName,
         author = "Zand3rs",
-        version = "1.0",
+        version = "1.1",
         slashCommand = "/livgardet",
         website = "https://www.esoui.com",
         registerForRefresh = true,
@@ -33,14 +61,16 @@ function LivgardetGuildTool:InitializeMenu()
     }
 
     local optionsTable = {
+     
         {
             type = "header",
             name = GetString(LIVGARDET_SETTINGS_HEADER_GENERAL),
-            width = "full",
+            width = "half",
         },
         {
             type = "checkbox",
             name = GetString(LIVGARDET_SETTINGS_CHAT_ICON),
+            tooltip = GetString(LIVGARDET_SETTINGS_CHAT_ICON_TT),
             getFunc = function() return self.db.showChatIcon end,
             setFunc = function( show )
                 self.db.showChatIcon = show
@@ -49,17 +79,13 @@ function LivgardetGuildTool:InitializeMenu()
         },
         {
             type = 'header',
-            name = 'MAil Settings',
-            width = 'full',
-        },
-        {
-            type = 'description',
-            text = 'The following setting will disable the confirmation box when deleting empty messages. If mail contain attachments they will not be removed.',
+            name = 'Quality of life settings',
             width = 'full',
         },
         {
             type = "checkbox",
             name = GetString(LIVGARDET_SETTINGS_MAIL_DELETION),
+            tooltip = GetString(LIVGARDET_SETTINGS_MAIL_DELETION_TT),
             getFunc = function() return self.db.skipMailDeletionPrompt end,
             setFunc = function( skip )
                 self.db.skipMailDeletionPrompt = skip
@@ -67,15 +93,23 @@ function LivgardetGuildTool:InitializeMenu()
         },
         {
 			type = "checkbox",
-			name = GetString(LIVGARDET_SETTINGS_CONFIRM_REFINE),
+			name = GetString(LIVGARDET_SETTINGS_CONFIRM_IMPROVE),
+            tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT),
 			getFunc = function() return SV.improveDialog end,
 			setFunc = function(value) SV.improveDialog = value 
-            end,
-			--default = defaults.improveDialog,
+          end,
 		},
-
-    }
-
+        {
+			type = "checkbox",
+			name = GetString(LIVGARDET_SETTINGS_CONFIRM_NOBOOK),
+            tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_NOBOOK_TT),
+			getFunc = function() return SV.dontReadBooks end,
+			setFunc = function(value) SV.dontReadBooks = value
+				DontReadBooks()
+			end,
+		},
+    } 
+    
     self.panel = LAM2:RegisterAddonPanel(self.name .. "Options", panelData)
     LAM2:RegisterOptionControls(self.name .. "Options", optionsTable)
 end
@@ -181,9 +215,6 @@ function LivgardetGuildTool:Initialize()
     self:ShowChatIcon(self.db.showChatIcon)
 end
 
-
-
-
 -- Guild Inviter
 
 local function AddPlayerToGuild(name, guildid, guildname) 
@@ -218,6 +249,7 @@ ZO_PreHook(MAIL_INBOX, "Delete", function(self)
 	end
 end)
 
+-- Removes the Crafting Improvement confirm box --
 
 local function HookImproveDialog()
 	local function ShowDialog_Hook(name, data)
@@ -231,13 +263,16 @@ local function HookImproveDialog()
 	ZO_PreHook("ZO_Dialogs_ShowDialog", ShowDialog_Hook)
 end
 
+-- EMD OF CODE.. I wish!
 
 function LivgardetGuildTool.OnAddOnLoaded(_, addon)
     if addon == LivgardetGuildTool.name then
         EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event) 
-        SV = ZO_SavedVars:NewAccountWide("NO_THANK_YOU_VARS", 1, defaults)
+        SV = ZO_SavedVars:NewAccountWide("LivgardetSavedVars", 1, defaults)
 		
         HookImproveDialog()
+        DontReadBooks()
+
         LivgardetGuildTool:Initialize()
     end
 end
