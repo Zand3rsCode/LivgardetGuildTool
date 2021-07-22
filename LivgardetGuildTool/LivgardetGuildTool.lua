@@ -67,11 +67,11 @@ function LivgardetGuildTool:InitializeMenu()
         },
         {
 			type = "checkbox",
-			name = GetString(NOTYOU_CRAFT),
-			tooltip = GetString(NOTYOU_CRAFT_TOOLTIP),
+			name = GetString(LIVGARDET_SETTINGS_CONFIRM_REFINE),
 			getFunc = function() return SV.improveDialog end,
-			setFunc = function(value) SV.improveDialog = value end,
-			default = defaults.improveDialog,
+			setFunc = function(value) SV.improveDialog = value 
+            end,
+			--default = defaults.improveDialog,
 		},
 
     }
@@ -181,13 +181,7 @@ function LivgardetGuildTool:Initialize()
     self:ShowChatIcon(self.db.showChatIcon)
 end
 
-function LivgardetGuildTool.OnAddOnLoaded(_, addon)
-    if addon == LivgardetGuildTool.name then
-        LivgardetGuildTool:Initialize()
-    end
-end
 
-EVENT_MANAGER:RegisterForEvent(LivgardetGuildTool.name, EVENT_ADD_ON_LOADED, LivgardetGuildTool.OnAddOnLoaded)
 
 
 -- Guild Inviter
@@ -237,11 +231,15 @@ local function HookImproveDialog()
 	ZO_PreHook("ZO_Dialogs_ShowDialog", ShowDialog_Hook)
 end
 
-local function OnAddonLoaded(event, name)
-	if name == ADDON_NAME then
-		EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event) 
+
+function LivgardetGuildTool.OnAddOnLoaded(_, addon)
+    if addon == LivgardetGuildTool.name then
+        EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event) 
         SV = ZO_SavedVars:NewAccountWide("NO_THANK_YOU_VARS", 1, defaults)
 		
         HookImproveDialog()
+        LivgardetGuildTool:Initialize()
     end
 end
+
+EVENT_MANAGER:RegisterForEvent(LivgardetGuildTool.name, EVENT_ADD_ON_LOADED, LivgardetGuildTool.OnAddOnLoaded)

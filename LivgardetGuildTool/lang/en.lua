@@ -27,3 +27,6 @@ ZO_CreateStringId("GINV_GUILDINVITED", "Invited <<C:1>> into \"<<2>>\" guild.")
 
 -- Mail deletion --
 ZO_CreateStringId("LIVGARDET_SETTINGS_MAIL_DELETION", "Disable mail erase confirmation")
+
+-- Confirmation boxes --
+ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_REFINE", "Disable confirmation")
