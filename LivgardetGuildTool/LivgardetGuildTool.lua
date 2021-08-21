@@ -21,7 +21,20 @@ local defaults = {
     nonstopHarvest = false, 
     hideTopBar = false, 
     NoCostTravel = false, 
+    AutoTrader = false,
 }
+
+ZO_PostHook(
+    INTERACTION,
+    "PopulateChatterOption",
+    function (control, optionIndex, _, _, optionType) 
+        if LG.AutoTrader then 
+            if optionIndex == 1 and optionType == CHATTER_START_TRADINGHOUSE then 
+                control:SelectChatterOptionByIndex(1) 
+            end 
+        end 
+    end
+)
 
 -- FAST TRAVEL CONFIRMATION.
 local function fasterTraveling()
@@ -103,7 +116,7 @@ end)
 -- Removes the Crafting Improvement confirm box --
 local function ImproveDialog()
         local function ShowDialog_improve(name, data)
-		if name == "CONFIRM_IMPROVE_ITEM" or name == "CONFIRM_IMPROVE_LOCKED_ITEM" or name == "GAMEPAD_CONFIRM_IMPROVE_LOCKED_ITEM" then
+		if name == "CONFIRM_IMPROVE_ITEM" or name == "CONFIRM_ENCHANT_LOCKED_ITEM" or name == "CONFIRM_RETRAIT_LOCKED_ITEM" or name == "CONFIRM_IMPROVE_LOCKED_ITEM" or name == "GAMEPAD_CONFIRM_IMPROVE_LOCKED_ITEM" then
 			if LG.improveDialog then
 				ImproveSmithingItem(data.bagId, data.slotIndex, data.boostersToApply)
 				return true
@@ -200,6 +213,13 @@ function LivgardetGuildTool:InitializeMenu()
             tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_FAST_TRAVEL_TT),
             getFunc = function() return LG.NoCostTravel end,
             setFunc = function(value) LG.NoCostTravel = value end,
+         }, 
+         { -- AUTO TRADER
+            type = 'checkbox',
+            name = GetString(LIVGARDET_SETTINGS_AUTOTRADER),
+            tooltip = GetString(LIVGARDET_SETTINGS_AUTOTRADER_TT),
+            getFunc = function() return LG.AutoTrader end,
+            setFunc = function(value) LG.AutoTrader = value end,
          }, 
     } 
     self.panel = LAM2:RegisterAddonPanel(self.name .. "Options", panelData)

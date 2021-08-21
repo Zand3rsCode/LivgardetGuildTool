@@ -36,7 +36,7 @@ ZO_CreateStringId("LIVGARDET_BUTTON_SETTINGS", "Settings")
 
 -- Improve gear confirmation
  ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE", "Disable Improvement confirmation")
- ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT", "This function removes the confirmation when upgrading gear so be careful.")
+ ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT", "This function removes the confirmation when upgrading gear/jewelry/enchants so be careful.")
 
 -- No confirmation or book on read
  ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_NOBOOK", "Quick Lorebook reading")
@@ -52,8 +52,8 @@ ZO_CreateStringId("LIVGARDET_BUTTON_SETTINGS", "Settings")
 
 
 -- Work in progress!!!
- ZO_CreateStringId("LIVGARDET_SETTINGS_REPAIR", "Fast repair")
- ZO_CreateStringId("LIVGARDET_SETTINGS_REPAIR_TT", "Removes the dialog box when repearing gear")
+ ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOTRADER", "Skip menu when talking to GuildTrader")
+ ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOTRADER_TT", "Removes the dialog box when talking to a trader, remove to be able to bid.")
 
 -- EMPTY LINE
 -- ZO_CreateStringId("LIVGARDET_SETTINGS_", "")
