@@ -4,10 +4,12 @@
 ; States and/or other countries. All rights reserved.
 ; You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
 
+
 ## Title: LivgardetGuildTool
-## APIVersion: 100035
+## APIVersion: 101031
 ## Author: @Zand3rs[PC/EU]
-## Version: 1.5
+## AddOnVersion: 1.6
+## Version: 1.6
 ## DependsOn: LibAddonMenu-2.0 LibCustomMenu
 ## SavedVariables: LivgardetSavedVars
 

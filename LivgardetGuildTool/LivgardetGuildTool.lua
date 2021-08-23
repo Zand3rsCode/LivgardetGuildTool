@@ -155,7 +155,7 @@ function LivgardetGuildTool:InitializeMenu()
         name = self.addonName,
         displayName = self.displayName,
         author = "Zand3rs",
-        version = "1.5",
+        version = "1.6",
         slashCommand = "/livgardet",
         website = "https://www.esoui.com",
         registerForRefresh = true,
