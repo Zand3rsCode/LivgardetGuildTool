@@ -8,8 +8,7 @@
 ## Title: LivgardetGuildTool
 ## APIVersion: 101031
 ## Author: @Zand3rs[PC/EU]
-## AddOnVersion: 1.6
-## Version: 1.6
+## Version: 1.7
 ## DependsOn: LibAddonMenu-2.0 LibCustomMenu
 ## SavedVariables: LivgardetSavedVars
 

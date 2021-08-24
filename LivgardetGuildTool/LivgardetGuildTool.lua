@@ -155,7 +155,7 @@ function LivgardetGuildTool:InitializeMenu()
         name = self.addonName,
         displayName = self.displayName,
         author = "Zand3rs",
-        version = "1.6",
+        version = "1.7",
         slashCommand = "/livgardet",
         website = "https://www.esoui.com",
         registerForRefresh = true,
@@ -245,7 +245,7 @@ function LivgardetGuildTool:InitializeChatIcon()
             { 
                 label = GetString(LIVGARDET_PORT_GUILDHOUSE), 
                 callback = function() 
-                    LivgardetGuildTool:PortToHouse("@Nsaje", 66, GetString(LIVGARDET_CHAT_GUILDHOUSE)) 
+                    LivgardetGuildTool:PortToHouse("@Vrazh", 86, GetString(LIVGARDET_CHAT_GUILDHOUSE)) 
                 end, 
             }, 
             {
