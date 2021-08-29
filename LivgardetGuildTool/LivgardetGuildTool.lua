@@ -21,7 +21,9 @@ local defaults = {
     nonstopHarvest = false, 
     hideTopBar = false, 
     NoCostTravel = false, 
-    AutoTrader = false,
+    AutoTrader = false, 
+    AutoRepair = false, 
+
 }
 
 ZO_PostHook(
@@ -35,6 +37,17 @@ ZO_PostHook(
         end 
     end
 )
+
+-- AUTO REPAIR!
+EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_OPEN_STORE, function()
+    local repairCost = GetRepairAllCost()
+    if repairCost > 0 and CanStoreRepair() then
+        if LG.AutoRepair then
+        RepairAll() 
+        d("Everything repaired for: " .. repairCost .. " hard earned Gold") 
+        end 
+    end 
+end)
 
 -- FAST TRAVEL CONFIRMATION.
 local function fasterTraveling()
@@ -167,7 +180,7 @@ function LivgardetGuildTool:InitializeMenu()
         { 
             type = "header", name = GetString(LIVGARDET_SETTINGS_HEADER_GENERAL), width = "half", 
         },
-        { -- SHOW OR HIDE CHAT ICON TO OPEN MENU
+        { -- SHOW OR HIDE CHAT ICON TO OPEN MENU.
             type = "checkbox", name = GetString(LIVGARDET_SETTINGS_CHAT_ICON), 
             tooltip = GetString(LIVGARDET_SETTINGS_CHAT_ICON_TT), 
             getFunc = function() return self.db.showChatIcon end,
@@ -176,21 +189,21 @@ function LivgardetGuildTool:InitializeMenu()
         {
             type = 'header', name = 'Quality of life settings', width = 'full',
         },
-        { -- SKIP CONFIRM PROMPT WHEN ERASING MAIL
+        { -- SKIP CONFIRM PROMPT WHEN ERASING MAIL.
             type = "checkbox",
             name = GetString(LIVGARDET_SETTINGS_MAIL_DELETION),
             tooltip = GetString(LIVGARDET_SETTINGS_MAIL_DELETION_TT),
             getFunc = function() return self.db.skipMailDeletionPrompt end,
             setFunc = function( skip ) self.db.skipMailDeletionPrompt = skip end,
         },
-        { -- HIDE DIALOG WHEN IMPROVING ITEMS
+        { -- HIDE DIALOG WHEN IMPROVING ITEMS.
 			type = "checkbox",
 			name = GetString(LIVGARDET_SETTINGS_CONFIRM_IMPROVE),
             tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT),
 			getFunc = function() return LG.improveDialog end,
 			setFunc = function(value) LG.improveDialog = value end,
 		},
-        { -- HIDE BOOK WHEN READING
+        { -- HIDE BOOK WHEN READING.
 			type = "checkbox",
 			name = GetString(LIVGARDET_SETTINGS_CONFIRM_NOBOOK),
             tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_NOBOOK_TT),
@@ -198,7 +211,7 @@ function LivgardetGuildTool:InitializeMenu()
 			setFunc = function(value) LG.dontReadBooks = value DontReadBooks() end,
 		},
 
-        { -- HIDE COMPASS
+        { -- HIDE COMPASS.
             type = 'checkbox',
             name = GetString(LIVGARDET_SETTINGS_COMPASS),
             tooltip = GetString(LIVGARDET_SETTINGS_COMPASS_TT),
@@ -207,20 +220,27 @@ function LivgardetGuildTool:InitializeMenu()
             default = hideTopBar,
          },
 
-         { -- NO COST TRAVEL
+         { -- NO COST TRAVEL.
             type = 'checkbox',
             name = GetString(LIVGARDET_SETTINGS_CONFIRM_FAST_TRAVEL),
             tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_FAST_TRAVEL_TT),
             getFunc = function() return LG.NoCostTravel end,
             setFunc = function(value) LG.NoCostTravel = value end,
          }, 
-         { -- AUTO TRADER
+         { -- AUTO TRADER.
             type = 'checkbox',
             name = GetString(LIVGARDET_SETTINGS_AUTOTRADER),
             tooltip = GetString(LIVGARDET_SETTINGS_AUTOTRADER_TT),
             getFunc = function() return LG.AutoTrader end,
             setFunc = function(value) LG.AutoTrader = value end,
          }, 
+         { -- AUTO REPAIR.
+            type = 'checkbox', 
+            name = GetString(LIVGARDET_SETTINGS_AUTOREPAIR), 
+            tooltip = GetString(LIVGARDET_SETTINGS_AUTOREPAIR_TT), 
+            getFunc = function() return LG.AutoRepair end, 
+            setFunc = function(value) LG.AutoRepair = value end,
+        }, 
     } 
     self.panel = LAM2:RegisterAddonPanel(self.name .. "Options", panelData)
     LAM2:RegisterOptionControls(self.name .. "Options", optionsTable)
@@ -330,8 +350,11 @@ function LivgardetGuildTool.OnAddOnLoaded(_, addon)
         DontInterruptHarvesting() 
         hidetop() 
         fasterTraveling()
+--        SystemMessage()
 
         LivgardetGuildTool:Initialize()
     end
 end
+
+
 EVENT_MANAGER:RegisterForEvent(LivgardetGuildTool.name, EVENT_ADD_ON_LOADED, LivgardetGuildTool.OnAddOnLoaded)

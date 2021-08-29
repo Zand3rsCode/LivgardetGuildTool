@@ -50,8 +50,12 @@ ZO_CreateStringId("LIVGARDET_BUTTON_SETTINGS", "Settings")
  ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_FAST_TRAVEL", "Disable wayshrine cost confirmation")
  ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_FAST_TRAVEL_TT", "Activating this will remove the confirmation window that displays the cost when using wayshrines")
 
+-- AUTO REPAIR
+ ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOREPAIR", "Auto repair when opening a Merchant")
+ ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOREPAIR_TT", "Activating this setting will make the game repair automaticly when you open a merchant.")
 
--- Work in progress!!!
+
+-- AUTO TRADER.
  ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOTRADER", "Skip menu when talking to GuildTrader")
  ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOTRADER_TT", "Removes the dialog box when talking to a trader, remove to be able to bid.")
 
