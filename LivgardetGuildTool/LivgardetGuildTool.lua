@@ -26,6 +26,38 @@ local defaults = {
 
 }
 
+-- ROLL FUNCTION
+function lgRoll(upper) 
+    if upper == "" then 
+        upper = 20 
+    else 
+        upper = tonumber(upper) 
+        if (upper == nil) then 
+            upper = 20 
+        end 
+    end 
+    local random = zo_random(1, upper) 
+    local output = 'Random roll - ' .. random .. ' out of ' .. upper 
+    CHAT_SYSTEM:StartTextEntry("/party " .. output .. " by: " .. GetUnitName("player")) 
+    local x = random / 10000 
+    local y = upper / 10000 
+    PingMap(MAP_PIN_TYPE_PING, MAP_TYPE_LOCATION_CENTERED, x, y) 
+end 
+function HandlePingData(eventCode, pingEventType, pingType, pingTag, offsetX, offsetY, isOwner) 
+    local result = math.floor(offsetX * 10000) 
+    local outOf = math.floor(offsetY * 10000) 
+    if outOf > 0 and outOf < 100 and result < 100 and isOwner ~= true then 
+        local output = 'Random roll - ' .. result .. ' out of ' .. outOf 
+        CHAT_SYSTEM:StartTextEntry("/party " .. output .. " by: " .. GetUnitName("player")) 
+    end 
+end 
+SLASH_COMMANDS["/roll"] = function (roll)  
+    lgRoll(roll) 
+end
+EVENT_MANAGER:RegisterForEvent("lgRollPing", EVENT_MAP_PING, HandlePingData)
+
+
+-- AUTO TRADER.
 ZO_PostHook(
     INTERACTION,
     "PopulateChatterOption",
@@ -38,7 +70,7 @@ ZO_PostHook(
     end
 )
 
--- AUTO REPAIR!
+-- AUTO REPAIR.
 EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_OPEN_STORE, function()
     local repairCost = GetRepairAllCost()
     if repairCost > 0 and CanStoreRepair() then
@@ -334,10 +366,9 @@ function LivgardetGuildTool:PortToHouse(name, houseId, message)
 end
 function LivgardetGuildTool:Initialize()
     self.db = ZO_SavedVars:NewAccountWide("LivgardetSavedVars", 1, nil, self.defaults)
---    LG = ZO_SavedVars:NewAccountWide("LivgardetSavedVars", 1, defaults) 
     self:InitializeMenu()
     self:InitializeChatIcon()
-    self:ShowChatIcon(self.db.showChatIcon)
+    self:ShowChatIcon(self.db.showChatIcon) 
 end
 
 -- Do i really need both if i reqrite everything? Ofcourse not  :)
@@ -349,9 +380,7 @@ function LivgardetGuildTool.OnAddOnLoaded(_, addon)
         DontReadBooks() 
         DontInterruptHarvesting() 
         hidetop() 
-        fasterTraveling()
---        SystemMessage()
-
+        fasterTraveling() 
         LivgardetGuildTool:Initialize()
     end
 end
