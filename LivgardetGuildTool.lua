@@ -2,7 +2,7 @@ LivgardetGuildTool = {
     db = nil,
     name = "LivgardetGuildTool",
     addonName = "Livgardet Guild Tool",
-    displayName = "|cea4e49Livgardet|r |c40c0f0Guild Tool|r",
+    displayName = "|cea4e49Livgardet|r |c40c0f0Guild Tool V1.8|r",
     panel = nil,
     chatIcon = nil
 }
@@ -16,15 +16,26 @@ local IconGHouse = "|t25:25:esoui/art/mainmenu/menubar_guilds_up.dds|t"
 
 local defaults = { 
     showChatIcon = true,
-    improveDialog = false,
+--    improveDialog = false,
     dontReadBooks = false,
     nonstopHarvest = false, 
     hideTopBar = false, 
     NoCostTravel = false, 
     AutoTrader = false, 
     AutoRepair = false, 
-
+    BugEater = false,
+    ConfirmDialog = false,
 }
+
+-- BUG EATER.
+local bugTemp=0
+function NoBugs(event, addonName) 
+    if LG.BugEater then 
+        if (bugTemp==0) then ZO_UIErrors_ToggleSupressDialog() 
+            bugTemp=1 
+        end 
+    end
+end
 
 -- ROLL FUNCTION
 function lgRoll(upper) 
@@ -96,6 +107,7 @@ local function fasterTraveling()
 end
 
 -- Hide The Compass
+
 local function hidetop()
     if LG.hideTopBar then 
         ZO_Compass:SetAlpha(0) 
@@ -105,10 +117,11 @@ local function hidetop()
         ZO_CompassFrameRight:SetHidden(true)
     else
         ZO_Compass:SetAlpha(1) 
-        ZO_CompassContainer:SetAlpha(1) 
-        ZO_CompassFrameCenter:SetHidden(false) 
+        ZO_CompassContainer:SetAlpha(1)
         ZO_CompassFrameLeft:SetHidden(false) 
         ZO_CompassFrameRight:SetHidden(false) 
+        ZO_CompassFrameCenter:SetHidden(false)
+
     end
 end
 
@@ -158,17 +171,24 @@ ZO_PreHook(MAIL_INBOX, "Delete", function(self)
 	end
 end)
 
--- Removes the Crafting Improvement confirm box --
-local function ImproveDialog()
-        local function ShowDialog_improve(name, data)
-		if name == "CONFIRM_IMPROVE_ITEM" or name == "CONFIRM_ENCHANT_LOCKED_ITEM" or name == "CONFIRM_RETRAIT_LOCKED_ITEM" or name == "CONFIRM_IMPROVE_LOCKED_ITEM" or name == "GAMEPAD_CONFIRM_IMPROVE_LOCKED_ITEM" then
-			if LG.improveDialog then
-				ImproveSmithingItem(data.bagId, data.slotIndex, data.boostersToApply)
-				return true
-			end
-		end
-	end
-	ZO_PreHook("ZO_Dialogs_ShowDialog", ShowDialog_improve)
+-- ADDS CONFIRM TO THE DIALOG BOXES --
+local function EasyConfirm(...)
+    if LG.ConfirmDialog then 
+        zo_callLater(function() 
+            if ZO_Dialog1 and ZO_Dialog1.textParams and ZO_Dialog1.textParams.mainTextParams then 
+                local itemName= ZO_Dialog1.textParams.mainTextParams[1] 
+                if  true then 
+                    for k, v in pairs(ZO_Dialog1.textParams.mainTextParams) do 
+                        if v == string.upper(v) then 
+                            ZO_Dialog1EditBox:SetText(v) 
+                        end 
+                    end 
+                    ZO_Dialog1EditBox:LoseFocus() 
+                end 
+            end
+        end, 10) 
+    end 
+    ZO_PreHook("ZO_Dialogs_ShowDialog", EasyConfirm)
 end
 
 -- Guild Invite from chat function
@@ -200,7 +220,7 @@ function LivgardetGuildTool:InitializeMenu()
         name = self.addonName,
         displayName = self.displayName,
         author = "Zand3rs",
-        version = "1.7",
+        version = "1.8",
         slashCommand = "/livgardet",
         website = "https://www.esoui.com",
         registerForRefresh = true,
@@ -232,9 +252,16 @@ function LivgardetGuildTool:InitializeMenu()
 			type = "checkbox",
 			name = GetString(LIVGARDET_SETTINGS_CONFIRM_IMPROVE),
             tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT),
-			getFunc = function() return LG.improveDialog end,
-			setFunc = function(value) LG.improveDialog = value end,
+			getFunc = function() return LG.ConfirmDialog end,
+			setFunc = function(value) LG.ConfirmDialog = value end,
 		},
+--        { -- HIDE DIALOG WHEN IMPROVING ITEMS.
+--			type = "checkbox",
+--			name = GetString(LIVGARDET_SETTINGS_CONFIRM_ENCHANT),
+--            tooltip = GetString(LIVGARDET_SETTINGS_CONFIRM_ENCHANT_TT),
+--			getFunc = function() return LG.enchantDialog end,
+--			setFunc = function(value) LG.enchantDialog = value end,
+--		},
         { -- HIDE BOOK WHEN READING.
 			type = "checkbox",
 			name = GetString(LIVGARDET_SETTINGS_CONFIRM_NOBOOK),
@@ -272,6 +299,13 @@ function LivgardetGuildTool:InitializeMenu()
             tooltip = GetString(LIVGARDET_SETTINGS_AUTOREPAIR_TT), 
             getFunc = function() return LG.AutoRepair end, 
             setFunc = function(value) LG.AutoRepair = value end,
+        }, 
+        { -- BUG EATER!
+            type = 'checkbox', 
+            name = GetString(LIVGARDET_SETTINGS_BUGEATER), 
+            tooltip = GetString(LIVGARDET_SETTINGS_BUGEATER_TT), 
+            getFunc = function() return LG.BugEater end, 
+            setFunc = function(value) LG.BugEater = value end,
         }, 
     } 
     self.panel = LAM2:RegisterAddonPanel(self.name .. "Options", panelData)
@@ -376,12 +410,17 @@ function LivgardetGuildTool.OnAddOnLoaded(_, addon)
     if addon == LivgardetGuildTool.name then
         EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, event) 
         LG = ZO_SavedVars:NewAccountWide("LivgardetSavedVars", 1, defaults) 
-        ImproveDialog()
+        --ImproveDialog()
+        EasyConfirm()
+        --QuickEnchant()
         DontReadBooks() 
         DontInterruptHarvesting() 
         hidetop() 
         fasterTraveling() 
+        NoBugs()
         LivgardetGuildTool:Initialize()
+--        hideCompass() 
+        
     end
 end
 

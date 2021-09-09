@@ -35,8 +35,12 @@ ZO_CreateStringId("LIVGARDET_BUTTON_SETTINGS", "Settings")
  ZO_CreateStringId("LIVGARDET_SETTINGS_MAIL_DELETION_TT", "This function removes the confirmation but only on mail without attachments")
 
 -- Improve gear confirmation
- ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE", "Disable Improvement confirmation")
- ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT", "This function removes the confirmation when upgrading gear/jewelry/enchants so be careful.")
+ ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE", "Enable Confirm confirmation")
+ ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_IMPROVE_TT", "This function adds the text CONFIRM when upgrading gear/jewelry/enchants so be careful.")
+
+-- Change Encant confirmation
+ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_ENCHANT", "Disable Enchanting confirmation")
+ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_ENCHANT_TT", "This function removes the confirmation when changing enchants so be careful.")
 
 -- No confirmation or book on read
  ZO_CreateStringId("LIVGARDET_SETTINGS_CONFIRM_NOBOOK", "Quick Lorebook reading")
@@ -59,5 +63,9 @@ ZO_CreateStringId("LIVGARDET_BUTTON_SETTINGS", "Settings")
  ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOTRADER", "Skip menu when talking to GuildTrader")
  ZO_CreateStringId("LIVGARDET_SETTINGS_AUTOTRADER_TT", "Removes the dialog box when talking to a trader, remove to be able to bid.")
 
--- EMPTY LINE
+ -- NOP BUGS.
+ ZO_CreateStringId("LIVGARDET_SETTINGS_BUGEATER", "Disable bug window")
+ ZO_CreateStringId("LIVGARDET_SETTINGS_BUGEATER_TT", "Removes the dialog box displaying errors when some  addon is not working.")
+
+ -- EMPTY LINE
 -- ZO_CreateStringId("LIVGARDET_SETTINGS_", "")

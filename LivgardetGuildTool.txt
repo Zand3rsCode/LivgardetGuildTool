@@ -8,10 +8,9 @@
 ## Title: LivgardetGuildTool
 ## APIVersion: 101031
 ## Author: @Zand3rs[PC/EU]
-## Version: 1.7
+## Version: 1.8
 ## DependsOn: LibAddonMenu-2.0 LibCustomMenu
 ## SavedVariables: LivgardetSavedVars
 
 LivgardetGuildTool.lua
-
 lang/$(language).lua
